@@ -48,7 +48,7 @@ class Strategy_Knight_Rush_But_Better(Strategy):
                                     else:
                                         position_rankings[new_position] = 1
                 
-                for key in position_rankings.keys():
+                for key in position_rankings:
                     if(position_rankings[key]>position_rankings[max_position]):
                         max_position = key
                 if(max_position):
@@ -62,7 +62,7 @@ class Strategy_Knight_Rush_But_Better(Strategy):
                 distance = self.get_range_distance(current_position, other_player.position)
                 if (other_player.stat_set.range < distance) and (my_player.stat_set.range >= distance):
                     return current_position
-                    
+
         while(speed_remaining >= 0 and not self.in_center(current_position)):
             if current_position.x < 4:
                 current_position.x += 1
