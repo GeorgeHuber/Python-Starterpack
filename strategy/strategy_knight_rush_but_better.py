@@ -1,3 +1,4 @@
+from email.base64mime import header_length
 from random import Random
 from game.game_state import GameState
 import game.character_class
@@ -93,3 +94,29 @@ class Strategy_Knight_Rush_But_Better(Strategy):
         current_distance = self.get_range_distance(my_player.position, other_player.position)
         new_distance = current_distance + 2 #hard coded for knight rn
         return new_distance > other_player.stat_set.range
+
+    def can_die(self, game_state, my_player_index):
+        player_state_list = game_state.player_state_list
+        my_player = player_state_list[my_player_index]
+        my_health = my_player.stat_set.health
+        for i in range(0, 4):
+            if i != my_player_index:
+                other_player = player_state_list[i]
+                other_damage = other_player.stat_set.damage
+                if other_damage >= my_health:
+                    if self.get_range_distance(my_player.position, other_player.position) <= other_player.stat_set.range:
+                        return True
+        return False
+
+    def can_die_next_turn(self, game_state, my_player_index):
+        player_state_list = game_state.player_state_list
+        my_player = player_state_list[my_player_index]
+        my_health = my_player.stat_set.health
+        for i in range(0, 4):
+            if i != my_player_index:
+                other_player = player_state_list[i]
+                other_damage = other_player.stat_set.damage
+                if other_damage >= my_health:
+                    if self.get_range_distance(my_player.position, other_player.position) - (other_player.stat_set.speed - 1) <= other_player.stat_set.range:
+                        return True
+        return False
