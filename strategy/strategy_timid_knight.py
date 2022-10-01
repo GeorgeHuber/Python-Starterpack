@@ -47,6 +47,7 @@ class Timid_Knight(Strategy):
                                             new_distance = self.get_range_distance(new_position, other_player.position)
                                             if (other_player.stat_set.range < new_distance) and (my_player.stat_set.range >= new_distance):
                                                 return new_position
+                            
                         else:
                             if self.can_die(game_state, my_player_index):
                                 return self.start_positions[my_player_index]
