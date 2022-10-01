@@ -8,6 +8,8 @@ from game.player_state import PlayerState
 from game.position import Position
 from strategy.strategy import Strategy
 
+import logging
+
 class Strategy_Knight_Rush(Strategy):
     start_positions = [(0, 0), (9, 0), (9, 9), (0, 9)]
 
@@ -17,20 +19,25 @@ class Strategy_Knight_Rush(Strategy):
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
         my_player = game_state.player_state_list[my_player_index]
         current_position = my_player.position
-        current_x = current_position.x
-        current_y = current_position.y
         speed_remaining = my_player.stat_set.speed
-        while(speed_remaining >= 0 and not self.in_center(current_x,current_y)):
-            if current_x < 4:
-                current_x += 1
-            elif current_x > 5:
-                current_x -= 1
-            elif current_y > 5:
-                current_y -= 1
-            elif current_y < 4:
-                current_y += 1
+
+        #logging.info((current_position.x, current_position.y) == self.start_positions[my_player_index])
+        #logging.info(my_player.gold >= Item.HUNTING_SCOPE.value.cost)
+        #logging.info("\n")
+        if (current_position.x, current_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
+            return current_position
+
+        while(speed_remaining >= 0 and not self.in_center(current_position)):
+            if current_position.x < 4:
+                current_position.x += 1
+            elif current_position.x > 5:
+                current_position.x -= 1
+            elif current_position.y > 5:
+                current_position.y -= 1
+            elif current_position.y < 4:
+                current_position.y += 1
             speed_remaining -= 1
-        return Position(current_x, current_y)
+        return current_position
 
 
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
@@ -51,16 +58,20 @@ class Strategy_Knight_Rush(Strategy):
 
 
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
-        my_position = game_state.player_state_list[my_player_index].position
-        if((my_position.x,my_position.y)==self.start_positions[my_player_index]) and game_state.player_state.gold > Item.HUNTING_SCOPE.cost:
-            return Item.HUNTING_SCOPE
+        my_player = game_state.player_state_list[my_player_index]
+        my_position = my_player.position
+        #logging.info((my_position.x, my_position.y) == self.start_positions[my_player_index])
+        #logging.info(my_player >= Item.HUNTING_SCOPE.value.cost)
+        #logging.info("\n")
+        if (my_position.x, my_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
+            return Item.SPEED_POTION
         return Item.NONE
 
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
         return False
 
-    def in_center(self, x, y) -> bool:
-        return (x == 4 or x == 5) and (y == 4 or y == 5)
+    def in_center(self, pos) -> bool:
+        return (pos.x == 4 or pos.x == 5) and (pos.y == 4 or pos.y == 5)
 
     def get_range_distance(self, pos1, pos2) -> int:
         return max(abs(pos1.x - pos2.x), abs(pos1.y - pos2.y))
