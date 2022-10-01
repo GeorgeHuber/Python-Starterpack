@@ -11,13 +11,14 @@ from strategy.strategy import Strategy
 
 import logging
 
-class Strategy_Knight_Rush_But_Better(Strategy):
+class Strategy_Knight_Rush_But_Even_Better(Strategy):
     start_positions = [(0, 0), (9, 0), (9, 9), (0, 9)]
     def strategy_initialize(self, my_player_index: int):
         return game.character_class.CharacterClass.KNIGHT
 
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
-        my_player = game_state.player_state_list[my_player_index]
+        player_state_list = game_state.player_state_list
+        my_player = player_state_list[my_player_index]
         current_position = my_player.position
         speed_remaining = my_player.stat_set.speed
 
@@ -25,6 +26,20 @@ class Strategy_Knight_Rush_But_Better(Strategy):
         if (current_position.x, current_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTER_SCOPE.value.cost and my_player.item == Item.NONE:
             return current_position
         
+        if self.in_center(current_position):
+            return current_position
+
+        if my_player.item == Item.HUNTER_SCOPE:
+            for i in range(0, 4):
+                if i != my_player_index:
+                    other_player = player_state_list[i]
+                    other_range = other_player.stat_set.range
+                    other_position = other_player.position
+                    my_range = my_player.stat_set.range
+                    distance = self.get_range_distance(current_position, other_position)
+                    if distance <= my_range and distance > other_range:
+                        return current_position
+
         while(speed_remaining >= 0 and not self.in_center(current_position)):
             if current_position.x < 4:
                 current_position.x += 1
