@@ -31,7 +31,7 @@ class Strategy_Knight_Rush_But_Better(Strategy):
             directions = [(0, 2), (2, 0), (0, -2), (-2, 0)]
             
             num_others_in_center = sum([self.in_center(player.position) for player in game_state.player_state_list]) - 1
-            if(num_others_in_center>=2):
+            if(num_others_in_center>=1):
                 for i in range(0, 4):
                     if i != my_player_index:
                         other_player = game_state.player_state_list[i]
