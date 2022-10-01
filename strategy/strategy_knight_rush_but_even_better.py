@@ -35,10 +35,11 @@ class Strategy_Knight_Rush_But_Even_Better(Strategy):
                     other_player = player_state_list[i]
                     other_range = other_player.stat_set.range
                     other_position = other_player.position
-                    my_range = my_player.stat_set.range
-                    distance = self.get_range_distance(current_position, other_position)
-                    if distance <= my_range and distance > other_range:
-                        return current_position
+                    if self.in_center(other_position):
+                        my_range = my_player.stat_set.range
+                        distance = self.get_range_distance(current_position, other_position)
+                        if distance <= my_range and distance > other_range:
+                            return current_position
 
         while(speed_remaining >= 0 and not self.in_center(current_position)):
             if current_position.x < 4:
