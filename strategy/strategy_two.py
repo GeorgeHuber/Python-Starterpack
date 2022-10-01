@@ -34,13 +34,15 @@ class StrategyTwo(Strategy):
         player_state_list = game_state.player_state_list
         my_player = player_state_list[my_player_index]
         my_range = my_player.stat_set.range
-        for i in range(0, 3):
+        lowest_health_index = 0 #index of player with the lowest health
+        for i in range(0, 4):
             if i != my_player_index:
                 other_player = player_state_list[i]
                 distance = self.get_range_distance(my_player.position, other_player.position)
                 if distance <= my_range:
-                    return i
-        return 0
+                    if other_player.health < player_state_list[lowest_health_index].health:
+                        lowest_health_index = i
+        return lowest_health_index
 
 
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
