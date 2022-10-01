@@ -3,11 +3,12 @@ from game.game_state import GameState
 import game.character_class
 
 from game.item import Item
+from game.player_state import PlayerState
 
 from game.position import Position
 from strategy.strategy import Strategy
 
-class StrategyTwo(Strategy):
+class Strategy_Knight_Rush(Strategy):
     start_positions = [(0, 0), (9, 0), (9, 9), (0, 9)]
 
     def strategy_initialize(self, my_player_index: int):
@@ -35,19 +36,24 @@ class StrategyTwo(Strategy):
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
         player_state_list = game_state.player_state_list
         my_player = player_state_list[my_player_index]
-        my_range = my_player.stat_set.range
-        lowest_health_index = 0 #index of player with the lowest health
+        my_range = my_player.stat_set.range +my_player.item.value.stat_set.range
+        lowest_health_index = -1 #index of player with the lowest health
         for i in range(0, 4):
             if i != my_player_index:
                 other_player = player_state_list[i]
                 distance = self.get_range_distance(my_player.position, other_player.position)
                 if distance <= my_range:
-                    if other_player.health < player_state_list[lowest_health_index].health:
+                    if  lowest_health_index==-1 or other_player.health < player_state_list[lowest_health_index].health:
                         lowest_health_index = i
+        if (lowest_health_index == -1):
+            return my_player_index
         return lowest_health_index
 
 
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
+        my_position = game_state.player_state_list[my_player_index].position
+        if((my_position.x,my_position.y)==self.start_positions[my_player_index]) and game_state.player_state.gold > Item.HUNTING_SCOPE.cost:
+            return Item.HUNTING_SCOPE
         return Item.NONE
 
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
