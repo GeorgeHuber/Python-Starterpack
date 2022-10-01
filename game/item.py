@@ -18,4 +18,5 @@ class Item(Enum):
     DEXTERITY_POTION = ItemModel(StatSet(0, 0, 0, 2), 1, 5)
     NONE = ItemModel(StatSet(0, 0, 0, 0), -1, 100)
     SHIELD = ItemModel(StatSet(0, 0, 0, 0), -1, 8)
+    HUNTING_SCOPE = ItemModel(StatSet(0, 0, 0, 1), -1, 8)
 
