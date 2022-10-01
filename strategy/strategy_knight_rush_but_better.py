@@ -1,5 +1,6 @@
 from email.base64mime import header_length
 from random import Random
+from turtle import position
 from game.game_state import GameState
 import game.character_class
 
@@ -29,7 +30,8 @@ class Strategy_Knight_Rush_But_Better(Strategy):
         #if moving outside circle can escape the range
         if self.in_center(current_position) and my_player.item == Item.HUNTER_SCOPE:
             directions = [(0, 2), (2, 0), (0, -2), (-2, 0)]
-            
+            position_rankings = {}
+            max_position = None
             num_others_in_center = sum([self.in_center(player.position) for player in game_state.player_state_list]) - 1
             if(num_others_in_center>=1):
                 for i in range(0, 4):
@@ -40,8 +42,27 @@ class Strategy_Knight_Rush_But_Better(Strategy):
                                 new_position = Position(current_position.x + direction[0], current_position.y + direction[1])
                                 new_distance = self.get_range_distance(new_position, other_player.position)
                                 if (other_player.stat_set.range < new_distance) and (my_player.stat_set.range >= new_distance):
-                                    return new_position
+                                    max_position = new_position
+                                    if new_position in position_rankings:
+                                        position_rankings[new_position]+=1
+                                    else:
+                                        position_rankings[new_position] = 1
+                
+                for key in position_rankings.keys():
+                    if(position_rankings[key]>position_rankings[max_position]):
+                        max_position = key
+                if(max_position):
+                    return max_position
+
+
         
+        if my_player.item == Item.HUNTER_SCOPE and not self.in_center(current_position):
+            num_others_in_center = sum([self.in_center(player.position) for player in game_state.player_state_list])
+            if num_others_in_center >= 1:
+                distance = self.get_range_distance(current_position, other_player.position)
+                if (other_player.stat_set.range < distance) and (my_player.stat_set.range >= distance):
+                    return current_position
+                    
         while(speed_remaining >= 0 and not self.in_center(current_position)):
             if current_position.x < 4:
                 current_position.x += 1
