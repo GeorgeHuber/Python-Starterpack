@@ -23,11 +23,13 @@ class Timid_Knight(Strategy):
         current_position = my_player.position
 
         if (current_position.x, current_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTER_SCOPE.value.cost and my_player.item == Item.NONE:
+            logging.info("at spawn + can buy")
             return current_position
         else:
             if self.in_center(current_position):
                 if my_player.item != Item.HUNTER_SCOPE:
                     if my_player.gold >= Item.HUNTER_SCOPE.value.cost and self.can_die(game_state, my_player_index):
+                        logging.info("")
                         return self.start_positions[my_player_index]
                     else:
                         return current_position
@@ -63,6 +65,7 @@ class Timid_Knight(Strategy):
                         current_position.y += 1
                     speed_remaining -= 1
                 return current_position
+        return current_position
 
     # Always attacks player with lowest health in range
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
