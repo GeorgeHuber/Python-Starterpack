@@ -8,6 +8,8 @@ from game.position import Position
 from strategy.strategy import Strategy
 
 class StrategyTwo(Strategy):
+    start_positions = [(0, 0), (9, 0), (9, 9), (0, 9)]
+
     def strategy_initialize(self, my_player_index: int):
         return game.character_class.CharacterClass.KNIGHT
 
@@ -18,13 +20,13 @@ class StrategyTwo(Strategy):
         current_y = current_position.y
         speed_remaining = my_player.stat_set.speed
         while(speed_remaining >= 0 and not self.in_center(current_x,current_y)):
-            if(current_x < 4):
+            if current_x < 4:
                 current_x += 1
-            elif(current_x > 5):
-               current_x -= 1
-            elif(current_y > 5):
+            elif current_x > 5:
+                current_x -= 1
+            elif current_y > 5:
                 current_y -= 1
-            elif(current_y < 4):
+            elif current_y < 4:
                 current_y += 1
             speed_remaining -= 1
         return Position(current_x, current_y)
