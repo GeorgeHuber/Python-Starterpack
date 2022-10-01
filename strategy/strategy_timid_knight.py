@@ -45,6 +45,7 @@ class Timid_Knight(Strategy):
                                             new_distance = self.get_range_distance(new_position, other_player.position)
                                             if (other_player.stat_set.range < new_distance) and (my_player.stat_set.range >= new_distance):
                                                 return new_position
+                            
                         else:
                             if self.can_die(game_state, my_player_index):
                                 return self.start_positions[my_player_index]
@@ -63,6 +64,7 @@ class Timid_Knight(Strategy):
                         current_position.y += 1
                     speed_remaining -= 1
                 return current_position
+        return current_position
 
     # Always attacks player with lowest health in range
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
