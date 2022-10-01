@@ -21,24 +21,10 @@ class Strategy_Knight_Rush(Strategy):
         current_position = my_player.position
         speed_remaining = my_player.stat_set.speed
 
-<<<<<<< HEAD
-        if((current_x,current_y)==self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost) and my_player.item == Item.NONE:
-            return current_position
-
-        while(speed_remaining >= 0 and not self.in_center(current_x,current_y)):
-            if current_x < 4:
-                current_x += 1
-            elif current_x > 5:
-                current_x -= 1
-            elif current_y > 5:
-                current_y -= 1
-            elif current_y < 4:
-                current_y += 1
-=======
         #logging.info((current_position.x, current_position.y) == self.start_positions[my_player_index])
         #logging.info(my_player.gold >= Item.HUNTING_SCOPE.value.cost)
         #logging.info("\n")
-        if (current_position.x, current_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
+        if (current_position.x, current_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTER_SCOPE.value.cost and my_player.item == Item.NONE:
             return current_position
 
         while(speed_remaining >= 0 and not self.in_center(current_position)):
@@ -50,7 +36,6 @@ class Strategy_Knight_Rush(Strategy):
                 current_position.y -= 1
             elif current_position.y < 4:
                 current_position.y += 1
->>>>>>> f111b742fe87240d47b8dc37f1804bd660ba3a5e
             speed_remaining -= 1
         return current_position
 
@@ -58,7 +43,7 @@ class Strategy_Knight_Rush(Strategy):
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
         player_state_list = game_state.player_state_list
         my_player = player_state_list[my_player_index]
-        my_range = my_player.stat_set.range +my_player.item.value.stat_set.range
+        my_range = my_player.stat_set.range #+my_player.item.value.stat_set.range
         lowest_health_index = -1 #index of player with the lowest health
         for i in range(0, 4):
             if i != my_player_index:
@@ -73,21 +58,13 @@ class Strategy_Knight_Rush(Strategy):
 
 
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
-<<<<<<< HEAD
-        player_state_list = game_state.player_state_list
-        my_player = player_state_list[my_player_index]
-        my_position = my_player.position
-        if (my_position.x, my_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
-            return Item.HUNTING_SCOPE
-=======
         my_player = game_state.player_state_list[my_player_index]
         my_position = my_player.position
         #logging.info((my_position.x, my_position.y) == self.start_positions[my_player_index])
         #logging.info(my_player >= Item.HUNTING_SCOPE.value.cost)
         #logging.info("\n")
-        if (my_position.x, my_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
-            return Item.SPEED_POTION
->>>>>>> f111b742fe87240d47b8dc37f1804bd660ba3a5e
+        if (my_position.x, my_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTER_SCOPE.value.cost:
+            return Item.HUNTER_SCOPE
         return Item.NONE
 
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
