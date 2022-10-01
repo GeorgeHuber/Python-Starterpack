@@ -20,6 +20,10 @@ class Strategy_Knight_Rush(Strategy):
         current_x = current_position.x
         current_y = current_position.y
         speed_remaining = my_player.stat_set.speed
+
+        if((current_x,current_y)==self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost) and my_player.item == Item.NONE:
+            return current_position
+
         while(speed_remaining >= 0 and not self.in_center(current_x,current_y)):
             if current_x < 4:
                 current_x += 1
@@ -51,8 +55,10 @@ class Strategy_Knight_Rush(Strategy):
 
 
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
-        my_position = game_state.player_state_list[my_player_index].position
-        if((my_position.x,my_position.y)==self.start_positions[my_player_index]) and game_state.player_state.gold > Item.HUNTING_SCOPE.cost:
+        player_state_list = game_state.player_state_list
+        my_player = player_state_list[my_player_index]
+        my_position = my_player.position
+        if (my_position.x, my_position.y) == self.start_positions[my_player_index] and my_player.gold >= Item.HUNTING_SCOPE.value.cost:
             return Item.HUNTING_SCOPE
         return Item.NONE
 
