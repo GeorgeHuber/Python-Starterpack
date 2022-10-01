@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from enum import Enum, auto
 import json
 import logging
